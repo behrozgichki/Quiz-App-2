@@ -1,89 +1,228 @@
+/* Base Reset & Variables */
+:root {
+  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+  --card-bg: rgba(30, 41, 59, 0.7);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --success: #10b981;
+  --error: #ef4444;
+}
+
 body {
   margin: 0;
-  font-family: Inter, sans-serif;
-  background: #0b1220;
-  color: #e5e7eb;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-gradient);
+  color: var(--text-main);
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* Container & Layout */
 .quiz-container {
   width: 100%;
-  max-width: 600px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  padding: 30px;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  max-width: 560px;
+  margin: 20px;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
 }
 
 h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 24px;
   text-align: center;
-  font-size: 32px;
-  margin-bottom: 20px;
+  letter-spacing: -0.025em;
+  background: linear-gradient(to right, #fff, var(--text-muted));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
+/* Progress Bar */
+.progress-wrapper {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), #a855f7);
+  border-radius: 999px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Stats Row */
+.quiz-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+
+/* Question Section */
 .question {
-  font-size: 20px;
-  margin-bottom: 20px;
-  color: #f1f5f9;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: var(--text-main);
+}
+
+/* Modern Radio Options */
+.quiz-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 28px;
 }
 
 .option {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  transition: 0.2s;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
 }
 
 .option:hover {
-  background: rgba(255,255,255,0.12);
-  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
-.option input {
-  accent-color: #38bdf8;
-  transform: scale(1.2);
+/* Custom Hidden Input for Styled Radio Layout */
+.option input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  margin-right: 14px;
+  outline: none;
+  display: grid;
+  place-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
 }
 
-.option label {
-  font-size: 15px;
-  cursor: pointer;
+.option input[type="radio"]::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 0.15s transform ease-in-out;
+  background-color: #fff;
 }
 
+.option input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+
+/* Active State Styling triggered by React selection */
+.option.selected {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--primary);
+}
+
+.option.selected input[type="radio"] {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.option span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+/* Primary Action Buttons */
 button {
   width: 100%;
-  padding: 12px;
-  margin-top: 20px;
+  padding: 14px;
   border: none;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #38bdf8, #6366f1);
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--primary);
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
-button:hover {
-  transform: scale(1.02);
-  opacity: 0.9;
+button:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
 }
 
-.loading {
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.25);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Results Card State */
+.result-card {
   text-align: center;
-  color: #94a3b8;
+  padding: 10px 0;
+}
+
+.result-card h1 {
+  font-size: 4rem;
+  margin: 0;
+  font-weight: 800;
+  background: linear-gradient(to bottom, #ffffff, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.result-card h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 8px;
+  margin-bottom: 32px;
+  color: var(--text-muted);
+}
+
+/* States: Loading & Errors */
+.loading, .error {
+  text-align: center;
+  padding: 40px 0;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
 .error {
-  text-align: center;
-  color: #f87171;
+  color: var(--error);
 }
